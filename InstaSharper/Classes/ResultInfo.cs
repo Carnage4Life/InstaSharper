@@ -22,6 +22,15 @@ namespace InstaSharper.Classes
             Message = errorMessage;
         }
 
+         public ResultInfo(ResponseType responseType, string errorMessage, string url)
+        {
+            ResponseType = responseType;
+            Message = errorMessage;
+            ChallengeUrl = url; 
+        }
+
+        public string ChallengeUrl { get;  }
+
         public Exception Exception { get; }
 
         public string Message { get; }

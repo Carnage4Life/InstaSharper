@@ -84,6 +84,7 @@ namespace InstaSharper.Classes
             {
                 var status = ErrorHandlingHelper.GetBadStatusFromJsonString(json);
                 var responseType = ResponseType.UnExpectedResponse;
+                string url = null;
                 switch (status.ErrorType)
                 {
                     case "checkpoint_logged_out":
@@ -98,12 +99,16 @@ namespace InstaSharper.Classes
                     case "sentry_block":
                         responseType = ResponseType.SentryBlock;
                         break;
+                    case "checkpoint_challenge_required":
+                        responseType = ResponseType.ChallengeRequired;
+                        url = status.CheckPointUrl; 
+                        break;
                 }
 
                 if (!status.IsOk() && status.Message.Contains("wait a few minutes"))
                     responseType = ResponseType.RequestsLimit;
 
-                var resultInfo = new ResultInfo(responseType, status.Message);
+                var resultInfo = new ResultInfo(responseType, status.Message, url);
                 return new Result<T>(false, default(T), resultInfo);
             }
         }
